@@ -1,0 +1,46 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+# https://peps.python.org/pep-0621/
+[tool.poetry]
+authors = ["Pepe Fagoaga <jfagoagas@gmail.com>"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "License :: OSI Approved :: Apache Software License"
+]
+description = ""
+license = ""
+maintainers = []
+name = "proxy_server"
+packages = [
+  {include = "proxy_server"},
+]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+typer = "0.12.3"
+
+[tool.poetry.scripts]
+proxy_server = "proxy_server.__main__:proxy_server"
+
+[tool.poetry.urls]
+"Changelog" = ""
+"Documentation" = ""
+"Homepage" = ""
+"Issue tracker" = ""
+
+[tool.poetry-version-plugin]
+source = "init"
+
+[tool.poetry_bumpversion.file."proxy_server/config/config.py"]
+replace = 'version = "{new_version}"'
+search = 'version = "{current_version}"'
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
