@@ -47,18 +47,20 @@ class ToTLS(ProxyServer):
                 # This length prefix ensures that the receiving end knows the exact boundaries
                 # of the DNS message within the stream.
 
-                # Get the length of the data into a 2-byte binary (big-endian - network)
-                # data_length = struct.pack("!H", len(data))
-                # Send DNS over TLS - Each DNS message is preceded by a 2-byte (big-endian - network) length prefix.
-                # FIXME: for some reason I can't make it to work appending the length
+                # Send DNS over TLS - Each DNS message is preceded by a 2-byte (big-endian - network) length prefix,
+                # TCP complies with that format, UDP needs to prepend the 2-byte package length.
                 tls_sock.sendall(data)
 
-                # Get the response
                 # The response can have \x00 if the client specifies to use EDNS, which includes padding.
                 # This padding is used to obscure the actual size of DNS messages to
                 # mitigate certain types of attacks and enhance privacy.
-                # FIXME: for some reason I can't make it to work appending the length
-                # response_length = struct.unpack("!H", tls_sock.recv(2))[0]
+
+                # Get the response
                 response = tls_sock.recv()
+
+                # Read the length of the response
+                # In UDP we remove the 2-byte length from the DNS Over TLS response
+                # response_length = struct.unpack("!H", tls_sock.recv(2))[0]
+                # response = tls_sock.recv()
 
         return response
